@@ -29,9 +29,9 @@ class ExpenseTile extends StatelessWidget {
                 Spacer(),
                 Row(
                   children: [
-                    Icon(Icons.trending_down),
+                    Icon(categoryIcons[expense.category]),
                     SizedBox(width: 10),
-                    Text(expense.date.toString())
+                    Text(expense.getFormatedDate)
                   ],
                 )
               ],
