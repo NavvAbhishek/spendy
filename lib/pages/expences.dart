@@ -1,4 +1,5 @@
 import 'package:expense_tracker_app/models/expense.dart';
+import 'package:expense_tracker_app/widgets/add_new_expense.dart';
 import 'package:expense_tracker_app/widgets/expense_list.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,16 @@ class _ExpencesState extends State<Expences> {
         category: Category.food)
   ];
 
+  // function to open a model overlay
+  void openAddExpencesOverlay() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return AddNewExpense();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +43,9 @@ class _ExpencesState extends State<Expences> {
         actions: [
           Container(
               color: Colors.yellow,
-              child: IconButton(onPressed: () {}, icon: const Icon(Icons.add)))
+              child: IconButton(
+                  onPressed: openAddExpencesOverlay,
+                  icon: const Icon(Icons.add)))
         ],
       ),
       body: Column(
