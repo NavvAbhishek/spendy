@@ -14,6 +14,26 @@ class _AddNewExpenseState extends State<AddNewExpense> {
 
   Category selectedCategory = Category.leasure;
 
+  final DateTime initialDate = DateTime.now();
+  final DateTime firstDate = DateTime(
+      DateTime.now().year - 1, DateTime.now().month, DateTime.now().day);
+  final DateTime lastDate = DateTime(
+      DateTime.now().year + 1, DateTime.now().month, DateTime.now().day);
+
+  DateTime selectedDate = DateTime.now();
+
+  Future<void> openDateModal() async {
+    try {
+      final pickedDate = await showDatePicker(
+          context: context, firstDate: firstDate, lastDate: lastDate);
+      setState(() {
+        selectedDate = pickedDate!;
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -48,9 +68,10 @@ class _AddNewExpenseState extends State<AddNewExpense> {
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text("2024/12/24"),
+                  Text(formateDate.format(selectedDate)),
                   IconButton(
-                      onPressed: () {}, icon: Icon(Icons.date_range_outlined))
+                      onPressed: openDateModal,
+                      icon: Icon(Icons.date_range_outlined))
                 ],
               ))
             ],
