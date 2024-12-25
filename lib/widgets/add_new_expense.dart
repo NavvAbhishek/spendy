@@ -34,6 +34,32 @@ class _AddNewExpenseState extends State<AddNewExpense> {
     }
   }
 
+  void handleFormSubmit() {
+    final userAmount = double.tryParse(amountController.text.trim());
+
+    if (titleController.text.trim().isEmpty || userAmount! <= 0) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return (AlertDialog(
+            title: const Text("Enter valid Data"),
+            content: const Text(
+                "Please enter valid data for the title and the amount here. The title can't be empty and the amount can't be less than zero"), // Text
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Close"))
+            ],
+          ));
+        },
+      );
+    } else {
+      print("save data");
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -98,7 +124,9 @@ class _AddNewExpenseState extends State<AddNewExpense> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     style: ButtonStyle(
                         backgroundColor:
                             WidgetStatePropertyAll(Colors.redAccent)),
@@ -109,7 +137,7 @@ class _AddNewExpenseState extends State<AddNewExpense> {
                   ),
                   SizedBox(width: 10),
                   ElevatedButton(
-                      onPressed: () {},
+                      onPressed: handleFormSubmit,
                       style: ButtonStyle(
                           backgroundColor:
                               WidgetStatePropertyAll(Colors.blueAccent)),
