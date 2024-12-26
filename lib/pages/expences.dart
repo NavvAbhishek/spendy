@@ -30,6 +30,12 @@ class _ExpencesState extends State<Expences> {
     });
   }
 
+  void onDeleteExpense(ExpenseModel expense) {
+    setState(() {
+      _expenseList.remove(expense);
+    });
+  }
+
   // function to open a model overlay
   void openAddExpencesOverlay() {
     showModalBottomSheet(
@@ -60,6 +66,7 @@ class _ExpencesState extends State<Expences> {
         children: [
           ExpenseList(
             expenseList: _expenseList,
+            onDeleteExpense: onDeleteExpense,
           )
         ],
       ),

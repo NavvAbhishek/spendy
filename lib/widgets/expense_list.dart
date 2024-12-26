@@ -3,9 +3,11 @@ import 'package:expense_tracker_app/widgets/expense_tile.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseList extends StatelessWidget {
-  const ExpenseList({super.key, required this.expenseList});
-
+  final void Function(ExpenseModel expense) onDeleteExpense;
   final List<ExpenseModel> expenseList;
+
+  const ExpenseList(
+      {super.key, required this.expenseList, required this.onDeleteExpense});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +17,15 @@ class ExpenseList extends StatelessWidget {
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 3),
-              child: ExpenseTile(
-                expense: expenseList[index],
+              child: Dismissible(
+                key: ValueKey(expenseList[index]),
+                direction: DismissDirection.startToEnd,
+                onDismissed: (direction) {
+                  onDeleteExpense(expenseList[index]);
+                },
+                child: ExpenseTile(
+                  expense: expenseList[index],
+                ),
               ),
             );
           }),
