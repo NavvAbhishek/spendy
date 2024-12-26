@@ -31,9 +31,23 @@ class _ExpencesState extends State<Expences> {
   }
 
   void onDeleteExpense(ExpenseModel expense) {
+    //? store the deleting expense
+    ExpenseModel deletingExpense = expense;
+    //? get the index of removing expense
+    final int removingIndex = _expenseList.indexOf(expense);
     setState(() {
       _expenseList.remove(expense);
     });
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Delete Successfull"),
+        action: SnackBarAction(
+            label: "undo",
+            onPressed: () {
+              setState(() {
+                _expenseList.insert(removingIndex, deletingExpense);
+              });
+            })));
   }
 
   // function to open a model overlay
