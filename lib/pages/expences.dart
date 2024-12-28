@@ -1,8 +1,11 @@
 import 'package:expense_tracker_app/models/expense.dart';
+import 'package:expense_tracker_app/server/database.dart';
 import 'package:expense_tracker_app/widgets/add_new_expense.dart';
 import 'package:expense_tracker_app/widgets/expense_list.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:expense_tracker_app/server/database.dart';
 
 class Expences extends StatefulWidget {
   const Expences({super.key});
@@ -12,18 +15,8 @@ class Expences extends StatefulWidget {
 }
 
 class _ExpencesState extends State<Expences> {
-  final List<ExpenseModel> _expenseList = [
-    ExpenseModel(
-        amount: 1200.00,
-        date: DateTime.now(),
-        title: "Football",
-        category: Category.leasure),
-    ExpenseModel(
-        amount: 1000.00,
-        date: DateTime.now(),
-        title: "Pizza",
-        category: Category.food)
-  ];
+  final myBox = Hive.box("expenseDatabase");
+  Database db = Database();
 
   Map<String, double> dataMap = {
     "Food": 0,
@@ -34,18 +27,20 @@ class _ExpencesState extends State<Expences> {
 
   void onAddNewExpense(ExpenseModel expense) {
     setState(() {
-      _expenseList.add(expense);
+      db.expenseList.add(expense);
       calCategoryValues();
     });
+    db.updateData();
   }
 
   void onDeleteExpense(ExpenseModel expense) {
     //? store the deleting expense
     ExpenseModel deletingExpense = expense;
     //? get the index of removing expense
-    final int removingIndex = _expenseList.indexOf(expense);
+    final int removingIndex = db.expenseList.indexOf(expense);
     setState(() {
-      _expenseList.remove(expense);
+      db.expenseList.remove(expense);
+      db.updateData();
       calCategoryValues();
     });
 
@@ -55,7 +50,8 @@ class _ExpencesState extends State<Expences> {
             label: "undo",
             onPressed: () {
               setState(() {
-                _expenseList.insert(removingIndex, deletingExpense);
+                db.expenseList.insert(removingIndex, deletingExpense);
+                db.updateData();
                 calCategoryValues();
               });
             })));
@@ -85,7 +81,7 @@ class _ExpencesState extends State<Expences> {
     double leasureValTotal = 0;
     double workValTotal = 0;
 
-    for (final expense in _expenseList) {
+    for (final expense in db.expenseList) {
       if (expense.category == Category.food) {
         foodValTotal += expense.amount;
       }
@@ -119,7 +115,15 @@ class _ExpencesState extends State<Expences> {
   @override
   void initState() {
     super.initState();
-    calCategoryValues();
+
+    // if this is the first time create the initial data
+    if (myBox.get("EXP_DATA") == null) {
+      db.createInitialDb();
+      calCategoryValues();
+    } else {
+      db.loadData();
+      calCategoryValues();
+    }
   }
 
   @override
@@ -140,7 +144,7 @@ class _ExpencesState extends State<Expences> {
         children: [
           PieChart(dataMap: dataMap),
           ExpenseList(
-            expenseList: _expenseList,
+            expenseList: db.expenseList,
             onDeleteExpense: onDeleteExpense,
           )
         ],

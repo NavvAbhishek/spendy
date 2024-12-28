@@ -8,9 +8,9 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ExpenseModelAdapter());
   Hive.registerAdapter(CategoryAdapter());
-  runApp(const MainApp());
-
   await Hive.openBox("expenseDatabase");
+
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
