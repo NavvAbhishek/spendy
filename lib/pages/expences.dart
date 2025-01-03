@@ -24,6 +24,13 @@ class _ExpencesState extends State<Expences> {
     "Work": 0,
   };
 
+  static const Color foodColor = Colors.red;
+  static const Color travelColor = Colors.blue;
+  static const Color leisureColor = Colors.green;
+  static const Color workColor = Color(0xFFFFD60A);
+
+  List<Color> colorList = [foodColor, travelColor, leisureColor, workColor];
+
   void onAddNewExpense(ExpenseModel expense) {
     setState(() {
       db.expenseList.add(expense);
@@ -144,7 +151,24 @@ class _ExpencesState extends State<Expences> {
       ),
       body: Column(
         children: [
-          PieChart(dataMap: dataMap),
+          PieChart(
+            dataMap: dataMap,
+            colorList: colorList,
+            chartType: ChartType.disc,
+            animationDuration: const Duration(milliseconds: 800),
+            chartValuesOptions: const ChartValuesOptions(
+              showChartValueBackground: false,
+              showChartValues: true,
+              decimalPlaces: 1,
+            ),
+            legendOptions: const LegendOptions(
+              showLegends: true,
+              legendPosition: LegendPosition.right,
+              legendShape: BoxShape.circle,
+              legendTextStyle: TextStyle(fontSize: 12),
+            ),
+          ),
+          const SizedBox(height: 10),
           ExpenseList(
             expenseList: db.expenseList,
             onDeleteExpense: onDeleteExpense,
