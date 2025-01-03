@@ -9,7 +9,7 @@ class ExpenseTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color.fromARGB(255, 59, 178, 233),
+      color: const Color(0xFF004E97),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
         child: Column(
@@ -20,18 +20,27 @@ class ExpenseTile extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .titleLarge
-                  ?.copyWith(color: Colors.white),
+                  ?.copyWith(color: Color(0xFFFFC300)),
             ),
             SizedBox(height: 6),
             Row(
               children: [
-                Text(expense.amount.toStringAsFixed(2)),
+                Text(
+                  expense.amount.toStringAsFixed(2),
+                  style: TextStyle(color: Colors.white),
+                ),
                 Spacer(),
                 Row(
                   children: [
-                    Icon(categoryIcons[expense.category]),
+                    Icon(
+                      categoryIcons[expense.category],
+                      color: Color(0xFFFFC300),
+                    ),
                     SizedBox(width: 10),
-                    Text(expense.getFormatedDate)
+                    Text(
+                      expense.getFormatedDate,
+                      style: TextStyle(color: Colors.white),
+                    )
                   ],
                 )
               ],

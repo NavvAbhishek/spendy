@@ -130,13 +130,16 @@ class _ExpencesState extends State<Expences> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Spendy"),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFF001D3D),
         actions: [
           Container(
-              color: Colors.yellow,
+              color: Color(0xFFFFC300),
               child: IconButton(
                   onPressed: openAddExpencesOverlay,
-                  icon: const Icon(Icons.add)))
+                  icon: const Icon(
+                    Icons.add,
+                    color: Color(0xFF001D3D),
+                  )))
         ],
       ),
       body: Column(
